@@ -6,6 +6,6 @@ set -e
 
 rm -f out.log 
 rm -f out.csv
-./gradlew -q run | tee out.log
+./gradlew -q run --args out.csv | tee out.log
 cat out.csv 
 

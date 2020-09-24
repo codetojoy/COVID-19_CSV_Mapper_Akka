@@ -12,9 +12,13 @@ import com.example.message.*;
 
 public class GreeterMain extends AbstractBehavior<SayHello> {
 
+    private static final DataSource dataSource = new SimpleDataSource();
+    private static String csvFilename;
+
     private Map<String,ActorRef<Greet>> greeterMap = new HashMap<>();
 
-    public static Behavior<SayHello> create() {
+    public static Behavior<SayHello> create(String csvFilename) {
+        GreeterMain.csvFilename = csvFilename;
         return Behaviors.setup(GreeterMain::new);
     }
 
@@ -27,12 +31,8 @@ public class GreeterMain extends AbstractBehavior<SayHello> {
         return newReceiveBuilder().onMessage(SayHello.class, this::onSayHello).build();
     }
 
-    private static final DataSource dataSource = new SimpleDataSource();
-    // TODO: this is not good
-    private static final int MAX_MESSAGES = dataSource.getMax();
-
     private Behavior<SayHello> onSayHello(SayHello command) {
-        ActorRef<Greeted> replyTo = getContext().spawn(GreeterBot.create(MAX_MESSAGES), command.name);
+        ActorRef<Greeted> replyTo = getContext().spawn(GreeterBot.create(csvFilename), command.name);
 
         Stream<String> dataInfoStream = dataSource.getData();
         List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());

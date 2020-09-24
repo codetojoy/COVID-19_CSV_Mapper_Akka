@@ -8,7 +8,7 @@ import java.util.*;
 import com.example.Constants;
 
 public class SimpleDataSource implements DataSource {
-    private static final int NUM_ROWS = 5;
+    private static final int NUM_ROWS = 1000;
     private static final int NUM_RECORDS_PER_CASE_ID = 3;
 
     @Override
