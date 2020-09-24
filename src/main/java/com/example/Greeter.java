@@ -3,13 +3,10 @@ package com.example;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.*;
 
-// import java.util.concurrent.atomic.AtomicInteger;
-
-import com.example.message.*;
+import net.codetojoy.message.*;
 
 public class Greeter extends AbstractBehavior<Greet> {
     private CaseInfo caseInfo = new CaseInfo();
-    // private AtomicInteger messageCounter = new AtomicInteger(0);
 
     public static Behavior<Greet> create() {
         return Behaviors.setup(Greeter::new);
@@ -25,7 +22,6 @@ public class Greeter extends AbstractBehavior<Greet> {
     }
 
     private Behavior<Greet> onGreet(Greet command) {
-        // int value = messageCounter.incrementAndGet();
 
         if (command.isDone) {
             getContext().getLog().info("TRACER Greeter DONE case: {}", caseInfo.toString());

@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import com.example.data.*;
-import com.example.message.*;
+import net.codetojoy.message.*;
 
 public class GreeterMain extends AbstractBehavior<SayHello> {
 

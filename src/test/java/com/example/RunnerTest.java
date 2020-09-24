@@ -6,7 +6,7 @@ import akka.actor.typed.ActorRef;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import com.example.message.*;
+import net.codetojoy.message.*;
 
 public class RunnerTest {
 

@@ -1,4 +1,4 @@
-package com.example.message;
+package net.codetojoy.message;
 
 public final class SayHello {
     public final String name;

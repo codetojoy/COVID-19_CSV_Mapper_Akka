@@ -4,7 +4,7 @@ import akka.actor.typed.ActorSystem;
 import java.io.*;
 import java.util.List;
 
-import com.example.message.*;
+import net.codetojoy.message.*;
 
 public class Runner {
     private static String csvFilename;

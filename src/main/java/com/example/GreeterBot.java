@@ -6,7 +6,7 @@ import akka.actor.typed.javadsl.*;
 import org.apache.commons.io.FileUtils;
 import java.io.*;
 
-import com.example.message.*;
+import net.codetojoy.message.*;
 
 public class GreeterBot extends AbstractBehavior<Greeted> {
     private File csvFile = null;

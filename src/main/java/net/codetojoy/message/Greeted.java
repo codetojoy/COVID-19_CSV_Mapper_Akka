@@ -1,4 +1,4 @@
-package com.example.message;
+package net.codetojoy.message;
 
 import akka.actor.typed.ActorRef;
 
