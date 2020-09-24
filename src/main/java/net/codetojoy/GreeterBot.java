@@ -1,4 +1,4 @@
-package com.example;
+package net.codetojoy;
 
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.*;

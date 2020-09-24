@@ -1,5 +1,4 @@
-package com.example;
-
+package net.codetojoy;
 
 public class CaseInfo {
     public String caseId;

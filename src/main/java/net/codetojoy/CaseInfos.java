@@ -1,4 +1,4 @@
-package com.example;
+package net.codetojoy;
 
 import net.codetojoy.data.*;
 

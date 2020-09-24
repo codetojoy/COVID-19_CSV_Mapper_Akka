@@ -1,4 +1,4 @@
-package com.example;
+package net.codetojoy;
 
 import akka.actor.typed.ActorSystem;
 import java.io.*;

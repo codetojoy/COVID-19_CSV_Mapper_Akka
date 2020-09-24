@@ -1,4 +1,4 @@
-package com.example;
+package net.codetojoy;
 
 import akka.actor.testkit.typed.javadsl.TestKitJunitResource;
 import akka.actor.testkit.typed.javadsl.TestProbe;

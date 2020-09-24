@@ -1,5 +1,5 @@
 
-package com.example;
+package net.codetojoy;
 
 public class Constants {
     public static final String CASE_ID_SEPARATOR = "::";

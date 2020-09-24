@@ -5,7 +5,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.stream.Stream;
 import java.util.*;
 
-import com.example.Constants;
+import net.codetojoy.Constants;
 
 public class SimpleDataSource implements DataSource {
     private static final int NUM_ROWS = 1000;
