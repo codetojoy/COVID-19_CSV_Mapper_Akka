@@ -33,7 +33,7 @@ public class Greeter extends AbstractBehavior<Greet> {
             command.replyTo.tell(new Greeted(caseInfoStr, command.whom, getContext().getSelf()));
         } else {
             if (caseInfo.caseId == null) { caseInfo.caseId = command.caseId; }
-            CaseInfo partialCaseInfo = CaseInfo.buildPartialCaseInfo(caseInfo.caseId, command.payload);
+            CaseInfo partialCaseInfo = CaseInfos.buildPartialCaseInfo(caseInfo.caseId, command.payload);
             caseInfo.merge(partialCaseInfo);
 
             getContext().getLog().info("TRACER Greeter case: {}", caseInfo.toString());

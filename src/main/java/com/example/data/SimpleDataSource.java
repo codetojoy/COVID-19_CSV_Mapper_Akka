@@ -1,5 +1,7 @@
 package com.example.data;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import java.util.stream.Stream;
 import java.util.*;
 
@@ -12,6 +14,17 @@ public class SimpleDataSource implements DataSource {
     @Override
     public int getMax() {
         return NUM_ROWS * NUM_RECORDS_PER_CASE_ID;
+    }
+
+    @Override
+    public ImmutablePair<String, String> parsePayload(String payload) {
+        String[] payloadTokens = payload.split(Constants.TOKEN_SEPARATOR);
+
+        String fieldName = payloadTokens[Constants.CSV_MOCK_INDEX_CASE_INFO];
+        String fieldValue = payloadTokens[Constants.CSV_MOCK_INDEX_VALUE];
+        ImmutablePair<String, String> result = new ImmutablePair(fieldName, fieldValue);
+
+        return result;
     }
 
     protected String populatePayload(int i, int caseId) {
