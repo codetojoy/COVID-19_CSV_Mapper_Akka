@@ -1,32 +1,21 @@
 package com.example;
 
-// import java.util.concurrent.atomic.AtomicInteger;
 
 public class CaseInfo {
     public String caseId;
-    public String a;
-    public String b;
-    public String c;
-    public String d;
+    public String region;
+    public String ageGroup;
+    public String recovered;
 
-    /*
-    private static AtomicInteger counter = new AtomicInteger(0);
-
-    public CaseInfo() {
-        int value = counter.incrementAndGet();
-        System.out.println("TRACER CaseInfo ctor counter: " + value);
-    }
-    */
     public void merge(CaseInfo partialCaseInfo) {
         if (this.caseId == null || partialCaseInfo.caseId == null
                 || (! this.caseId.equals(partialCaseInfo.caseId))) {
             throw new IllegalArgumentException("internal error on merge");
         }
 
-        if (partialCaseInfo.a != null) { this.a = partialCaseInfo.a; }
-        if (partialCaseInfo.b != null) { this.b = partialCaseInfo.b; }
-        if (partialCaseInfo.c != null) { this.c = partialCaseInfo.c; }
-        if (partialCaseInfo.d != null) { this.d = partialCaseInfo.d; }
+        if (partialCaseInfo.region != null) { this.region = partialCaseInfo.region; }
+        if (partialCaseInfo.ageGroup != null) { this.ageGroup = partialCaseInfo.ageGroup; }
+        if (partialCaseInfo.recovered != null) { this.recovered = partialCaseInfo.recovered; }
     }
 
     public static CaseInfo buildPartialCaseInfo(String caseId, String payload) {
@@ -38,10 +27,9 @@ public class CaseInfo {
         int index = 0;
         for (String payloadToken : payloadTokens) {
             if ((payloadToken != null) && (! payloadToken.isEmpty())) {
-                if (index == 0) { caseInfo.a = payloadToken; }
-                if (index == 1) { caseInfo.b = payloadToken; }
-                if (index == 2) { caseInfo.c = payloadToken; }
-                if (index == 3) { caseInfo.d = payloadToken; }
+                if (index == 0) { caseInfo.region = payloadToken; }
+                if (index == 1) { caseInfo.ageGroup = payloadToken; }
+                if (index == 2) { caseInfo.recovered = payloadToken; }
             }
             index++;
         }
@@ -50,7 +38,7 @@ public class CaseInfo {
     }
 
     public String toString() {
-        String result = String.format(Constants.CSV_OUTPUT_FORMAT, caseId, a, b, c, d);
+        String result = String.format(Constants.CSV_OUTPUT_FORMAT, caseId, region, ageGroup, recovered);
         return result;
     }
 }
