@@ -1,4 +1,4 @@
-package com.example.data;
+package net.codetojoy.data;
 
 public final class DataInfo {
     public final String caseId;

@@ -1,4 +1,4 @@
-package com.example.data;
+package net.codetojoy.data;
 
 import java.util.*;
 import java.util.stream.*;

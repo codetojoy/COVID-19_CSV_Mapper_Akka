@@ -1,4 +1,4 @@
-package com.example.data;
+package net.codetojoy.data;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 

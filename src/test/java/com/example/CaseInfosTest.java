@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.data.SimpleDataSource;
+import net.codetojoy.data.SimpleDataSource;
 
 import java.util.*;
 import java.util.stream.*;

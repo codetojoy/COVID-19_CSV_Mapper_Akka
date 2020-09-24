@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.data.*;
+import net.codetojoy.data.*;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 

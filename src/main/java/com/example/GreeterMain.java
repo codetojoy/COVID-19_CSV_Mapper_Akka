@@ -7,7 +7,7 @@ import akka.actor.typed.javadsl.*;
 import java.util.*;
 import java.util.stream.*;
 
-import com.example.data.*;
+import net.codetojoy.data.*;
 import net.codetojoy.message.*;
 
 public class GreeterMain extends AbstractBehavior<SayHello> {
