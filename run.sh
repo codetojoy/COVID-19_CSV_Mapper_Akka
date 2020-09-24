@@ -4,8 +4,8 @@ set -e
 
 ./gradlew -q clean cJ
 
-rm out.log 
-rm out.csv
+rm -f out.log 
+rm -f out.csv
 ./gradlew -q run | tee out.log
 cat out.csv 
 
