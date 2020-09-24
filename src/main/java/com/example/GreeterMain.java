@@ -37,49 +37,65 @@ public class GreeterMain extends AbstractBehavior<SayHello> {
         Stream<String> dataInfoStream = dataSource.getData();
         List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());
 
-        boolean isInitialCase = true;
-        String lastCaseId = "";
+        String lastCaseId = null;
         for (String dataInfoString : dataInfoStrings) {
-            DataInfo dataInfo = dataSource.getDataInfo(dataInfoString);
-            String caseId = dataInfo.caseId;
-
-            if (! greeterMap.keySet().contains(caseId)) {
-                ActorRef<Greet> greeter = getContext().spawn(Greeter.create(), "greeter" + caseId);
-                greeterMap.put(caseId, greeter);
-            }
-
-            if (isInitialCase) {
-                lastCaseId = caseId;
-                isInitialCase = false;
-            }
-
-            getContext().getLog().info("TRACER GM {} {} {}", lastCaseId, caseId, dataInfo.payload);
-
-            if (! caseId.equals(lastCaseId)) {
-                // new boundary, so done
-                sendDoneMessage(lastCaseId, command.name, replyTo);
-                lastCaseId = caseId;
-            }
-
-            sendMessage(caseId, dataInfo.payload, command.name, replyTo);
+            String commandName = command.name;
+            lastCaseId = processDataInfo(dataInfoString, lastCaseId, commandName, replyTo);
         }
 
-        // new boundary, so done
+        // finish off the last boundary
         sendDoneMessage(lastCaseId, command.name, replyTo);
 
         return this;
     }
 
+    protected String processDataInfo(String dataInfoString, String lastCaseId, String commandName,
+                                ActorRef<Greeted> replyTo) {
+        DataInfo dataInfo = dataSource.getDataInfo(dataInfoString);
+        String caseId = dataInfo.caseId;
+
+        // TODO: filter by region
+
+        if (lastCaseId == null) {
+            lastCaseId = caseId;
+        }
+
+        // getContext().getLog().info("TRACER GM {} {} {}", lastCaseId, caseId, dataInfo.payload);
+
+        if (! caseId.equals(lastCaseId)) {
+            // new boundary, so done
+            sendDoneMessage(lastCaseId, commandName, replyTo);
+            lastCaseId = caseId;
+        }
+
+        sendMessage(caseId, dataInfo.payload, commandName, replyTo);
+
+        return caseId;
+    }
+
+    protected ActorRef<Greet> getGreeterByCaseId(String caseId) {
+        ActorRef<Greet> greeter = null;
+
+        if (greeterMap.keySet().contains(caseId)) {
+            greeter = greeterMap.get(caseId);
+        } else {
+            greeter = getContext().spawn(Greeter.create(), Constants.ACTOR_NAME_PREFIX + caseId);
+            greeterMap.put(caseId, greeter);
+        }
+
+        return greeter;
+    }
+
     protected void sendDoneMessage(String caseId, String name, ActorRef<Greeted> replyTo) {
         String payload = "";
         boolean isDone = true;
-        ActorRef<Greet> greeter = greeterMap.get(caseId);
+        ActorRef<Greet> greeter = getGreeterByCaseId(caseId);
         greeter.tell(new Greet(caseId, payload, isDone, name, replyTo));
     }
 
     protected void sendMessage(String caseId, String payload, String name, ActorRef<Greeted> replyTo) {
         boolean isDone = false;
-        ActorRef<Greet> greeter = greeterMap.get(caseId);
+        ActorRef<Greet> greeter = getGreeterByCaseId(caseId);
         greeter.tell(new Greet(caseId, payload, isDone, name, replyTo));
     }
 }

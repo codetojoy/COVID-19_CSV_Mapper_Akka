@@ -7,4 +7,6 @@ public class Constants {
 
     public static final String CSV_OUTPUT_FORMAT = "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",";
     public static final String PAYLOAD_FORMAT = "%s,%s,%s,%s";
+
+    public static final String ACTOR_NAME_PREFIX = "greeter";
 }
