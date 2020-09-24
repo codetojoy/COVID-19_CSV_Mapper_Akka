@@ -35,13 +35,9 @@ public class CaseInfo {
         return caseInfo;
     }
 
+
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(caseId + "|");
-        builder.append(a + "|");
-        builder.append(b + "|");
-        builder.append(c + "|");
-        builder.append(d);
-        return builder.toString();
+        String result = String.format(Constants.CSV_OUTPUT_FORMAT, caseId, a, b, c, d);
+        return result;
     }
 }

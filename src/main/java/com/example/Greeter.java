@@ -34,7 +34,7 @@ public class Greeter extends AbstractBehavior<Greet> {
     } else {
         if (caseInfo.caseId == null) { caseInfo.caseId = command.caseId; }
 
-        String[] payloadTokens = command.payload.split(",");
+        String[] payloadTokens = command.payload.split(Constants.TOKEN_SEPARATOR);
         int index = 0;
         for (String payloadToken : payloadTokens) {
             if ((payloadToken != null) && (! payloadToken.isEmpty())) {

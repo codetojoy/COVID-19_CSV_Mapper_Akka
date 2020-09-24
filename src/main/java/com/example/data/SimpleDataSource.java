@@ -3,8 +3,9 @@ package com.example.data;
 import java.util.stream.Stream;
 import java.util.*;
 
+import com.example.Constants;
+
 public class SimpleDataSource implements DataSource {
-    private static final String FORMAT = "%s,%s,%s,%s";
     private static final int NUM_ROWS = 5;
     private static final int NUM_RECORDS_PER_CASE_ID = 4;
 
@@ -24,19 +25,17 @@ public class SimpleDataSource implements DataSource {
        if (i == 3) { c = "C" + caseId; }
        if (i == 4) { d = "D" + caseId; }
 
-       return String.format(FORMAT, a, b, c, d);
+       return String.format(Constants.PAYLOAD_FORMAT, a, b, c, d);
     }
 
     @Override
     public DataInfo getDataInfo(String s) {
-        String[] tokens = s.split(CASE_ID_SEPARATOR);
+        String[] tokens = s.split(Constants.CASE_ID_SEPARATOR);
         String caseId = tokens[0];
         String payload = tokens[1];
         DataInfo dataInfo = new DataInfo(caseId, payload);
-        return dataInfo; 
+        return dataInfo;
     }
-
-    private static final String CASE_ID_SEPARATOR = "::";
 
     @Override
     public Stream<String> getData() {
@@ -46,7 +45,7 @@ public class SimpleDataSource implements DataSource {
             for (int row = 1; row <= NUM_RECORDS_PER_CASE_ID; row++) {
                 String caseIdStr = "" + caseId;
                 String payload = populatePayload(row, caseId);
-                String result = caseIdStr + CASE_ID_SEPARATOR + payload;
+                String result = caseIdStr + Constants.CASE_ID_SEPARATOR + payload;
                 results.add(result);
             }
         }
