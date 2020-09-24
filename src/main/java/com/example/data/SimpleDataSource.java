@@ -7,25 +7,33 @@ import com.example.Constants;
 
 public class SimpleDataSource implements DataSource {
     private static final int NUM_ROWS = 5;
-    private static final int NUM_RECORDS_PER_CASE_ID = 4;
+    private static final int NUM_RECORDS_PER_CASE_ID = 3;
 
     @Override
     public int getMax() {
         return NUM_ROWS * NUM_RECORDS_PER_CASE_ID;
     }
 
-    String populatePayload(int i, int caseId) {
-       String a = "";
-       String b = "";
-       String c = "";
-       String d = "";
+    protected String populatePayload(int i, int caseId) {
+        String refDate = new Date().toString();
+        String caseIdStr = "" + caseId;
+        String fieldName = "";
+        String fieldValue = "";
 
-       if (i == 1) { a = "A" + caseId; }
-       if (i == 2) { b = "B" + caseId; }
-       if (i == 3) { c = "C" + caseId; }
-       if (i == 4) { d = "D" + caseId; }
+        if (i == 1) {
+            fieldName = Constants.FIELD_NAME_REGION;
+            fieldValue = Constants.FIELD_NAME_REGION + caseId;
+        } else if (i == 2) {
+            fieldName = Constants.FIELD_NAME_AGE_GROUP;
+            fieldValue = Constants.FIELD_NAME_AGE_GROUP + caseId;
+        } else if (i == 3) {
+            fieldName = Constants.FIELD_NAME_RECOVERED;
+            fieldValue = Constants.FIELD_NAME_RECOVERED + caseId;
+        }
 
-       return String.format(Constants.PAYLOAD_FORMAT, a, b, c, d);
+        String result = String.format(Constants.CSV_MOCK_DATA_FORMAT, refDate, caseIdStr, fieldName, fieldValue);
+
+        return result;
     }
 
     @Override

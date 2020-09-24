@@ -3,12 +3,24 @@ package com.example;
 
 public class Constants {
     public static final String CASE_ID_SEPARATOR = "::";
-    public static final String TOKEN_SEPARATOR = ",";
+    public static final String TOKEN_SEPARATOR = "\",\"";
 
-    public static final String CSV_OUTPUT_FORMAT = "\"%s\",\"%s\",\"%s\",\"%s\",";
+    public static final String CSV_OUTPUT_FORMAT = "\"%s\",\"%s\",\"%s\",\"%s\"";
     public static final String PAYLOAD_FORMAT = "%s,%s,%s";
 
     public static final String ACTOR_NAME_PREFIX = "greeter";
+
+    // REF_DATE, Case Id, Case Info, Value
+    public static final String CSV_MOCK_DATA_FORMAT = "\"%s\",\"%s\",\"%s\",\"%s\"";
+    public static final int CSV_MOCK_INDEX_CASE_ID = 1;
+    public static final int CSV_MOCK_INDEX_CASE_INFO = 2;
+    public static final int CSV_MOCK_INDEX_VALUE = 3;
+
+    public static final String FIELD_NAME_REGION = "Region";
+    public static final String FIELD_NAME_AGE_GROUP = "Age Group";
+    public static final String FIELD_NAME_RECOVERED = "Recovered";
+
+    public static final String DOUBLE_QUOTE = "\"";
 
 // 0 - "REF_DATE"
 // 1 - "GEO"
