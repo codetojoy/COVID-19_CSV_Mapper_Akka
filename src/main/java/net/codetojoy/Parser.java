@@ -5,14 +5,14 @@ import akka.actor.typed.javadsl.*;
 
 import net.codetojoy.message.*;
 
-public class Greeter extends AbstractBehavior<ParseRow> {
+public class Parser extends AbstractBehavior<ParseRow> {
     private CaseInfo caseInfo = new CaseInfo();
 
     public static Behavior<ParseRow> create() {
-        return Behaviors.setup(Greeter::new);
+        return Behaviors.setup(Parser::new);
     }
 
-    private Greeter(ActorContext<ParseRow> context) {
+    private Parser(ActorContext<ParseRow> context) {
         super(context);
     }
 
@@ -24,7 +24,7 @@ public class Greeter extends AbstractBehavior<ParseRow> {
     private Behavior<ParseRow> onParseRow(ParseRow command) {
 
         if (command.isDone) {
-            getContext().getLog().info("TRACER Greeter DONE case: {}", caseInfo.toString());
+            getContext().getLog().info("TRACER Parser DONE case: {}", caseInfo.toString());
             String caseInfoStr = caseInfo.toString();
             command.replyTo.tell(new EmitCase(caseInfoStr, command.whom, getContext().getSelf()));
         } else {
@@ -32,7 +32,7 @@ public class Greeter extends AbstractBehavior<ParseRow> {
             CaseInfo partialCaseInfo = CaseInfos.buildPartialCaseInfo(caseInfo.caseId, command.payload);
             caseInfo.merge(partialCaseInfo);
 
-            getContext().getLog().info("TRACER Greeter case: {}", caseInfo.toString());
+            getContext().getLog().info("TRACER Parser case: {}", caseInfo.toString());
         }
 
         return this;

@@ -79,7 +79,7 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
         if (parserMap.keySet().contains(caseId)) {
             parser = parserMap.get(caseId);
         } else {
-            parser = getContext().spawn(Greeter.create(), Constants.ACTOR_NAME_PREFIX + caseId);
+            parser = getContext().spawn(Parser.create(), Constants.ACTOR_NAME_PREFIX + caseId);
             parserMap.put(caseId, parser);
         }
 
