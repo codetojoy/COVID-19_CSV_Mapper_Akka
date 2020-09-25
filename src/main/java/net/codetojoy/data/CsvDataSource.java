@@ -9,12 +9,6 @@ import java.nio.charset.Charset;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class CsvDataSource implements DataSource {
-    private static final int MAX = 999;
-
-    @Override
-    public int getMax() {
-        return MAX;
-    }
 
     @Override
     public ImmutablePair<String, String> parsePayload(String payload) {

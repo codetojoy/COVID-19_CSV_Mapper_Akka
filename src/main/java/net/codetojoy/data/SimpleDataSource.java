@@ -12,11 +12,6 @@ public class SimpleDataSource implements DataSource {
     private static final int NUM_RECORDS_PER_CASE_ID = 3;
 
     @Override
-    public int getMax() {
-        return NUM_ROWS * NUM_RECORDS_PER_CASE_ID;
-    }
-
-    @Override
     public ImmutablePair<String, String> parsePayload(String payload) {
         String[] payloadTokens = payload.split(Constants.TOKEN_SEPARATOR);
 
