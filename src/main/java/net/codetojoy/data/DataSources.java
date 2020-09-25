@@ -1,18 +1,51 @@
 package net.codetojoy.data;
 
-public class DataSources {
+interface DataSourcesProfile {
+    DataSource getProdDataSource();
+    DataSource getProdDataSource(String inputCsvFilename);
+}
+
+class SimpleDataSources implements DataSourcesProfile {
+    @Override
+    public DataSource getProdDataSource() {
+        return new SimpleDataSource();
+    }
+
+    @Override
+    public DataSource getProdDataSource(String inputCsvFilename) {
+        return new SimpleDataSource();
+    }
+}
+
+class ProdDataSources implements DataSourcesProfile {
     private static DataSource prodDataSource = null;
 
-    public static DataSource getProdDataSource() {
+    @Override
+    public DataSource getProdDataSource() {
         if (prodDataSource == null) {
             throw new IllegalStateException("internal error prodDataSource");
         }
         return prodDataSource;
     }
 
-    public static DataSource getProdDataSource(String inputCsvFilename) {
+    @Override
+    public DataSource getProdDataSource(String inputCsvFilename) {
         prodDataSource = new CsvDataSource(inputCsvFilename);
         return prodDataSource;
+    }
+}
+
+public class DataSources {
+    // NOTE: change this to switch from Simple to PROD
+    // private static DataSourcesProfile dataSourcesProfile = new SimpleDataSources();
+    private static DataSourcesProfile dataSourcesProfile = new ProdDataSources();
+
+    public static DataSource getProdDataSource() {
+        return dataSourcesProfile.getProdDataSource();
+    }
+
+    public static DataSource getProdDataSource(String inputCsvFilename) {
+        return dataSourcesProfile.getProdDataSource(inputCsvFilename);
     }
 
     public static DataSource getSimpleDataSource() {
