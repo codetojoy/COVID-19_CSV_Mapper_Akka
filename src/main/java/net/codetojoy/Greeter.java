@@ -5,23 +5,23 @@ import akka.actor.typed.javadsl.*;
 
 import net.codetojoy.message.*;
 
-public class Greeter extends AbstractBehavior<Greet> {
+public class Greeter extends AbstractBehavior<ParseRow> {
     private CaseInfo caseInfo = new CaseInfo();
 
-    public static Behavior<Greet> create() {
+    public static Behavior<ParseRow> create() {
         return Behaviors.setup(Greeter::new);
     }
 
-    private Greeter(ActorContext<Greet> context) {
+    private Greeter(ActorContext<ParseRow> context) {
         super(context);
     }
 
     @Override
-    public Receive<Greet> createReceive() {
-        return newReceiveBuilder().onMessage(Greet.class, this::onGreet).build();
+    public Receive<ParseRow> createReceive() {
+        return newReceiveBuilder().onMessage(ParseRow.class, this::onParseRow).build();
     }
 
-    private Behavior<Greet> onGreet(Greet command) {
+    private Behavior<ParseRow> onParseRow(ParseRow command) {
 
         if (command.isDone) {
             getContext().getLog().info("TRACER Greeter DONE case: {}", caseInfo.toString());

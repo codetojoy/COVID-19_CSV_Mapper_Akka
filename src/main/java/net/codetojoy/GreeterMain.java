@@ -15,7 +15,7 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
     private static final DataSource dataSource = new SimpleDataSource();
     private static String csvFilename;
 
-    private Map<String,ActorRef<Greet>> greeterMap = new HashMap<>();
+    private Map<String,ActorRef<ParseRow>> parserMap = new HashMap<>();
 
     public static Behavior<BeginProcessing> create(String csvFilename) {
         GreeterMain.csvFilename = csvFilename;
@@ -73,29 +73,29 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
         return caseId;
     }
 
-    protected ActorRef<Greet> getGreeterByCaseId(String caseId) {
-        ActorRef<Greet> greeter = null;
+    protected ActorRef<ParseRow> getGreeterByCaseId(String caseId) {
+        ActorRef<ParseRow> parser = null;
 
-        if (greeterMap.keySet().contains(caseId)) {
-            greeter = greeterMap.get(caseId);
+        if (parserMap.keySet().contains(caseId)) {
+            parser = parserMap.get(caseId);
         } else {
-            greeter = getContext().spawn(Greeter.create(), Constants.ACTOR_NAME_PREFIX + caseId);
-            greeterMap.put(caseId, greeter);
+            parser = getContext().spawn(Greeter.create(), Constants.ACTOR_NAME_PREFIX + caseId);
+            parserMap.put(caseId, parser);
         }
 
-        return greeter;
+        return parser;
     }
 
     protected void sendDoneMessage(String caseId, String name, ActorRef<Greeted> replyTo) {
         String payload = "";
         boolean isDone = true;
-        ActorRef<Greet> greeter = getGreeterByCaseId(caseId);
-        greeter.tell(new Greet(caseId, payload, isDone, name, replyTo));
+        ActorRef<ParseRow> parser = getGreeterByCaseId(caseId);
+        parser.tell(new ParseRow(caseId, payload, isDone, name, replyTo));
     }
 
     protected void sendMessage(String caseId, String payload, String name, ActorRef<Greeted> replyTo) {
         boolean isDone = false;
-        ActorRef<Greet> greeter = getGreeterByCaseId(caseId);
-        greeter.tell(new Greet(caseId, payload, isDone, name, replyTo));
+        ActorRef<ParseRow> parser = getGreeterByCaseId(caseId);
+        parser.tell(new ParseRow(caseId, payload, isDone, name, replyTo));
     }
 }

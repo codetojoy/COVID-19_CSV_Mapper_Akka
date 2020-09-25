@@ -7,9 +7,9 @@ import java.util.Objects;
 public class Greeted {
     public final String caseInfoStr;
     public final String whom;
-    public final ActorRef<Greet> from;
+    public final ActorRef<ParseRow> from;
 
-    public Greeted(String caseInfoStr, String whom, ActorRef<Greet> from) {
+    public Greeted(String caseInfoStr, String whom, ActorRef<ParseRow> from) {
       this.caseInfoStr = caseInfoStr;
       this.whom = whom;
       this.from = from;
