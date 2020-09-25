@@ -1,27 +1,12 @@
 package net.codetojoy;
 
 import net.codetojoy.data.*;
+import net.codetojoy.util.*;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class CaseInfos {
     private static final DataSource dataSource = new SimpleDataSource();
-
-    // TODO: find home for this
-    protected static String clean(String s) {
-        String result = s;
-
-        if (result.startsWith(Constants.DOUBLE_QUOTE)) {
-            result = result.substring(1);
-        }
-
-        if (result.endsWith(Constants.DOUBLE_QUOTE)) {
-            int lastIndex = result.length() - 1;
-            result = result.substring(0, lastIndex);
-        }
-
-        return result;
-    }
 
     public static CaseInfo buildPartialCaseInfo(String caseId, String payload) {
         CaseInfo caseInfo = new CaseInfo();
@@ -29,8 +14,8 @@ public class CaseInfos {
 
         if (! payload.trim().isEmpty()) {
             ImmutablePair<String, String> pair = dataSource.parsePayload(payload);
-            String fieldName = clean(pair.getLeft());
-            String fieldValue = clean(pair.getRight());
+            String fieldName = Strings.clean(pair.getLeft());
+            String fieldValue = Strings.clean(pair.getRight());
 
             if (fieldName.equals(Constants.FIELD_NAME_REGION)) {
                 caseInfo.region = fieldValue;

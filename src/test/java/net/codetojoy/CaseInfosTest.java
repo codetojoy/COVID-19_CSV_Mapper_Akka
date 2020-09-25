@@ -9,45 +9,6 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class CaseInfosTest {
-    @Test
-    public void testClean_none() {
-        String s = "mozart";
-
-        // test
-        String result = CaseInfo.clean(s);
-
-        assertEquals(s, result);
-    }
-
-    @Test
-    public void testClean_begin() {
-        String s = "\"mozart";
-
-        // test
-        String result = CaseInfo.clean(s);
-
-        assertEquals("mozart", result);
-    }
-
-    @Test
-    public void testClean_end() {
-        String s = "mozart\"";
-
-        // test
-        String result = CaseInfo.clean(s);
-
-        assertEquals("mozart", result);
-    }
-
-    @Test
-    public void testClean_both() {
-        String s = "\"mozart\"";
-
-        // test
-        String result = CaseInfo.clean(s);
-
-        assertEquals("mozart", result);
-    }
 
     @Test
     public void testBuildPartialCaseInfo_empty() {
@@ -55,7 +16,7 @@ public class CaseInfosTest {
         String payload = "";
 
         // test
-        CaseInfo result = CaseInfo.buildPartialCaseInfo(caseId, payload);
+        CaseInfo result = CaseInfos.buildPartialCaseInfo(caseId, payload);
 
         assertEquals(caseId, result.caseId);
     }
@@ -68,7 +29,7 @@ public class CaseInfosTest {
         String payload = dataStrings.get(0);
 
         // test
-        CaseInfo result = CaseInfo.buildPartialCaseInfo(caseId, payload);
+        CaseInfo result = CaseInfos.buildPartialCaseInfo(caseId, payload);
 
         // 1::"Thu Sep 24 14:24:59 ADT 2020","1","Region","Region1"
         assertEquals(caseId, result.caseId);
@@ -83,7 +44,7 @@ public class CaseInfosTest {
         String payload = dataStrings.get(1);
 
         // test
-        CaseInfo result = CaseInfo.buildPartialCaseInfo(caseId, payload);
+        CaseInfo result = CaseInfos.buildPartialCaseInfo(caseId, payload);
 
         // 1::"Thu Sep 24 14:24:59 ADT 2020","1","Region","Region1"
         assertEquals(caseId, result.caseId);
@@ -98,7 +59,7 @@ public class CaseInfosTest {
         String payload = dataStrings.get(2);
 
         // test
-        CaseInfo result = CaseInfo.buildPartialCaseInfo(caseId, payload);
+        CaseInfo result = CaseInfos.buildPartialCaseInfo(caseId, payload);
 
         // 1::"Thu Sep 24 14:24:59 ADT 2020","1","Region","Region1"
         assertEquals(caseId, result.caseId);

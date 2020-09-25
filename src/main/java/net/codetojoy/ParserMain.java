@@ -9,6 +9,7 @@ import java.util.stream.*;
 
 import net.codetojoy.data.*;
 import net.codetojoy.message.*;
+import net.codetojoy.util.Constants;
 
 public class ParserMain extends AbstractBehavior<BeginProcessing> {
 

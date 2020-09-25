@@ -5,10 +5,10 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.stream.Stream;
 import java.util.*;
 
-import net.codetojoy.Constants;
+import net.codetojoy.util.Constants;
 
 public class SimpleDataSource implements DataSource {
-    private static final int NUM_ROWS = 25_000;
+    private static final int NUM_ROWS = 1_000;
     private static final int NUM_RECORDS_PER_CASE_ID = 3;
 
     @Override
