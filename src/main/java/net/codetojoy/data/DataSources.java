@@ -51,4 +51,8 @@ public class DataSources {
     public static DataSource getSimpleDataSource() {
         return new SimpleDataSource();
     }
+
+    public static RowFilter getRowFilter() {
+        return new CsvRowFilter();
+    }
 }

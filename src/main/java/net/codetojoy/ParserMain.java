@@ -53,26 +53,36 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
     protected String processDataInfo(String dataInfoString, String lastCaseId, String commandName,
                                 ActorRef<EmitCase> replyTo) {
+        String result = lastCaseId;
         DataInfo dataInfo = dataSource.getDataInfo(dataInfoString);
-        String caseId = dataInfo.caseId;
 
-        // TODO: filter by region
+        // TODO: filter by region ?
+        RowFilter rowFilter = DataSources.getRowFilter();
+        boolean doInclude = (! rowFilter.doExclude(dataInfo));
 
-        if (lastCaseId == null) {
-            lastCaseId = caseId;
+        if (doInclude) {
+            String caseId = dataInfo.caseId;
+
+            if (lastCaseId == null) {
+                lastCaseId = caseId;
+            }
+
+            // getContext().getLog().info("TRACER GM {} {} {}", lastCaseId, caseId, dataInfo.payload);
+
+            if (! caseId.equals(lastCaseId)) {
+                // new boundary, so done
+                sendDoneMessage(lastCaseId, commandName, replyTo);
+                lastCaseId = caseId;
+            }
+
+            sendMessage(caseId, dataInfo.payload, commandName, replyTo);
+
+            result = caseId;
+        } else {
+            getContext().getLog().error("TRACER illegal caseId: {}", dataInfo.caseId);
         }
 
-        // getContext().getLog().info("TRACER GM {} {} {}", lastCaseId, caseId, dataInfo.payload);
-
-        if (! caseId.equals(lastCaseId)) {
-            // new boundary, so done
-            sendDoneMessage(lastCaseId, commandName, replyTo);
-            lastCaseId = caseId;
-        }
-
-        sendMessage(caseId, dataInfo.payload, commandName, replyTo);
-
-        return caseId;
+        return result;
     }
 
     protected ActorRef<ParseRow> getGreeterByCaseId(String caseId) {
