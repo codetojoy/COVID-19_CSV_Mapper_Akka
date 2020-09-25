@@ -26,7 +26,7 @@ public class Greeter extends AbstractBehavior<ParseRow> {
         if (command.isDone) {
             getContext().getLog().info("TRACER Greeter DONE case: {}", caseInfo.toString());
             String caseInfoStr = caseInfo.toString();
-            command.replyTo.tell(new Greeted(caseInfoStr, command.whom, getContext().getSelf()));
+            command.replyTo.tell(new EmitCase(caseInfoStr, command.whom, getContext().getSelf()));
         } else {
             if (caseInfo.caseId == null) { caseInfo.caseId = command.caseId; }
             CaseInfo partialCaseInfo = CaseInfos.buildPartialCaseInfo(caseInfo.caseId, command.payload);

@@ -7,9 +7,9 @@ public final class ParseRow {
     public final String payload;
     public final boolean isDone;
     public final String whom;
-    public final ActorRef<Greeted> replyTo;
+    public final ActorRef<EmitCase> replyTo;
 
-    public ParseRow(String caseId, String payload, boolean isDone, String whom, ActorRef<Greeted> replyTo) {
+    public ParseRow(String caseId, String payload, boolean isDone, String whom, ActorRef<EmitCase> replyTo) {
         this.caseId = caseId;
         this.payload = payload;
         this.isDone = isDone;

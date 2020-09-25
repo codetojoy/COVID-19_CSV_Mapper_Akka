@@ -8,27 +8,27 @@ import java.io.*;
 
 import net.codetojoy.message.*;
 
-public class GreeterBot extends AbstractBehavior<Greeted> {
+public class GreeterBot extends AbstractBehavior<EmitCase> {
     private File csvFile = null;
 
     private static final String UTF_8 = "UTF-8";
     private static final boolean DO_APPEND = true;
 
-    public static Behavior<Greeted> create(String csvFilename) {
+    public static Behavior<EmitCase> create(String csvFilename) {
         return Behaviors.setup(context -> new GreeterBot(context, csvFilename));
     }
 
-    private GreeterBot(ActorContext<Greeted> context, String csvFilename) {
+    private GreeterBot(ActorContext<EmitCase> context, String csvFilename) {
         super(context);
         csvFile = new File(csvFilename);
     }
 
     @Override
-    public Receive<Greeted> createReceive() {
-        return newReceiveBuilder().onMessage(Greeted.class, this::onGreeted).build();
+    public Receive<EmitCase> createReceive() {
+        return newReceiveBuilder().onMessage(EmitCase.class, this::onEmitCase).build();
     }
 
-    private void writeMessageToFile(Greeted message) {
+    private void writeMessageToFile(EmitCase message) {
         String str = message.caseInfoStr + System.lineSeparator();
         try {
             FileUtils.writeStringToFile(csvFile, str, UTF_8, DO_APPEND);
@@ -37,7 +37,7 @@ public class GreeterBot extends AbstractBehavior<Greeted> {
         }
     }
 
-    private Behavior<Greeted> onGreeted(Greeted message) {
+    private Behavior<EmitCase> onEmitCase(EmitCase message) {
         getContext().getLog().info("TRACER GreeterBot {}", message.caseInfoStr);
         writeMessageToFile(message);
         return this;

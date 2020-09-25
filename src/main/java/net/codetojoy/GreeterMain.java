@@ -32,7 +32,7 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
     }
 
     private Behavior<BeginProcessing> onBeginProcessing(BeginProcessing command) {
-        ActorRef<Greeted> replyTo = getContext().spawn(GreeterBot.create(csvFilename), command.name);
+        ActorRef<EmitCase> replyTo = getContext().spawn(GreeterBot.create(csvFilename), command.name);
 
         Stream<String> dataInfoStream = dataSource.getData();
         List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());
@@ -50,7 +50,7 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
     }
 
     protected String processDataInfo(String dataInfoString, String lastCaseId, String commandName,
-                                ActorRef<Greeted> replyTo) {
+                                ActorRef<EmitCase> replyTo) {
         DataInfo dataInfo = dataSource.getDataInfo(dataInfoString);
         String caseId = dataInfo.caseId;
 
@@ -86,14 +86,14 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
         return parser;
     }
 
-    protected void sendDoneMessage(String caseId, String name, ActorRef<Greeted> replyTo) {
+    protected void sendDoneMessage(String caseId, String name, ActorRef<EmitCase> replyTo) {
         String payload = "";
         boolean isDone = true;
         ActorRef<ParseRow> parser = getGreeterByCaseId(caseId);
         parser.tell(new ParseRow(caseId, payload, isDone, name, replyTo));
     }
 
-    protected void sendMessage(String caseId, String payload, String name, ActorRef<Greeted> replyTo) {
+    protected void sendMessage(String caseId, String payload, String name, ActorRef<EmitCase> replyTo) {
         boolean isDone = false;
         ActorRef<ParseRow> parser = getGreeterByCaseId(caseId);
         parser.tell(new ParseRow(caseId, payload, isDone, name, replyTo));

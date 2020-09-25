@@ -4,12 +4,12 @@ import akka.actor.typed.ActorRef;
 
 import java.util.Objects;
 
-public class Greeted {
+public class EmitCase {
     public final String caseInfoStr;
     public final String whom;
     public final ActorRef<ParseRow> from;
 
-    public Greeted(String caseInfoStr, String whom, ActorRef<ParseRow> from) {
+    public EmitCase(String caseInfoStr, String whom, ActorRef<ParseRow> from) {
       this.caseInfoStr = caseInfoStr;
       this.whom = whom;
       this.from = from;
@@ -19,10 +19,10 @@ public class Greeted {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Greeted greeted = (Greeted) o;
-        return Objects.equals(caseInfoStr, greeted.caseInfoStr) &&
-               Objects.equals(whom, greeted.whom) &&
-               Objects.equals(from, greeted.from);
+        EmitCase emitCase = (EmitCase) o;
+        return Objects.equals(caseInfoStr, emitCase.caseInfoStr) &&
+               Objects.equals(whom, emitCase.whom) &&
+               Objects.equals(from, emitCase.from);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Greeted {
 
     @Override
     public String toString() {
-      return "Greeted{" +
+      return "EmitCase{" +
               "whom='" + whom + '\'' +
               ", from=" + from +
               '}';
