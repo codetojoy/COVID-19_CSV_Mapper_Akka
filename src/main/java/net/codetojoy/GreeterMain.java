@@ -32,7 +32,7 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
     }
 
     private Behavior<BeginProcessing> onBeginProcessing(BeginProcessing command) {
-        ActorRef<EmitCase> replyTo = getContext().spawn(GreeterBot.create(csvFilename), command.name);
+        ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(csvFilename), command.name);
 
         Stream<String> dataInfoStream = dataSource.getData();
         List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());

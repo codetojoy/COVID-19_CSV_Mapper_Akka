@@ -8,17 +8,17 @@ import java.io.*;
 
 import net.codetojoy.message.*;
 
-public class GreeterBot extends AbstractBehavior<EmitCase> {
+public class Emitter extends AbstractBehavior<EmitCase> {
     private File csvFile = null;
 
     private static final String UTF_8 = "UTF-8";
     private static final boolean DO_APPEND = true;
 
     public static Behavior<EmitCase> create(String csvFilename) {
-        return Behaviors.setup(context -> new GreeterBot(context, csvFilename));
+        return Behaviors.setup(context -> new Emitter(context, csvFilename));
     }
 
-    private GreeterBot(ActorContext<EmitCase> context, String csvFilename) {
+    private Emitter(ActorContext<EmitCase> context, String csvFilename) {
         super(context);
         csvFile = new File(csvFilename);
     }
@@ -38,7 +38,7 @@ public class GreeterBot extends AbstractBehavior<EmitCase> {
     }
 
     private Behavior<EmitCase> onEmitCase(EmitCase message) {
-        getContext().getLog().info("TRACER GreeterBot {}", message.caseInfoStr);
+        getContext().getLog().info("TRACER Emitter {}", message.caseInfoStr);
         writeMessageToFile(message);
         return this;
     }

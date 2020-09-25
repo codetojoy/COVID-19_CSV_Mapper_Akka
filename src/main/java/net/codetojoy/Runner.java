@@ -8,7 +8,7 @@ import net.codetojoy.message.*;
 
 public class Runner {
     private static String csvFilename;
-    private static  final int DELAY_IN_MILLIS = 500;
+    private static  final int DELAY_IN_MILLIS = 2000;
 
     public static void main(String[] args) {
         csvFilename = args[0];
