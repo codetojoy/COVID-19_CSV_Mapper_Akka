@@ -8,12 +8,12 @@ import net.codetojoy.message.*;
 
 public class Runner {
     private static String csvFilename;
-    private static  final int DELAY_IN_MILLIS = 1000;
+    private static  final int DELAY_IN_MILLIS = 500;
 
     public static void main(String[] args) {
         csvFilename = args[0];
-        ActorSystem<SayHello> greeterMain = ActorSystem.create(GreeterMain.create(csvFilename), "helloakka");
-        greeterMain.tell(new SayHello("Charles"));
+        ActorSystem<BeginProcessing> greeterMain = ActorSystem.create(GreeterMain.create(csvFilename), "csv_akka");
+        greeterMain.tell(new BeginProcessing("csv"));
 
         try {
             watchCsvFileUntilQuiet();

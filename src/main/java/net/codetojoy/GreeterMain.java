@@ -10,28 +10,28 @@ import java.util.stream.*;
 import net.codetojoy.data.*;
 import net.codetojoy.message.*;
 
-public class GreeterMain extends AbstractBehavior<SayHello> {
+public class GreeterMain extends AbstractBehavior<BeginProcessing> {
 
     private static final DataSource dataSource = new SimpleDataSource();
     private static String csvFilename;
 
     private Map<String,ActorRef<Greet>> greeterMap = new HashMap<>();
 
-    public static Behavior<SayHello> create(String csvFilename) {
+    public static Behavior<BeginProcessing> create(String csvFilename) {
         GreeterMain.csvFilename = csvFilename;
         return Behaviors.setup(GreeterMain::new);
     }
 
-    private GreeterMain(ActorContext<SayHello> context) {
+    private GreeterMain(ActorContext<BeginProcessing> context) {
         super(context);
     }
 
     @Override
-    public Receive<SayHello> createReceive() {
-        return newReceiveBuilder().onMessage(SayHello.class, this::onSayHello).build();
+    public Receive<BeginProcessing> createReceive() {
+        return newReceiveBuilder().onMessage(BeginProcessing.class, this::onBeginProcessing).build();
     }
 
-    private Behavior<SayHello> onSayHello(SayHello command) {
+    private Behavior<BeginProcessing> onBeginProcessing(BeginProcessing command) {
         ActorRef<Greeted> replyTo = getContext().spawn(GreeterBot.create(csvFilename), command.name);
 
         Stream<String> dataInfoStream = dataSource.getData();
