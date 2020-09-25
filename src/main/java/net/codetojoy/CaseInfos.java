@@ -6,9 +6,13 @@ import net.codetojoy.util.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class CaseInfos {
-    private static final DataSource dataSource = new SimpleDataSource();
 
     public static CaseInfo buildPartialCaseInfo(String caseId, String payload) {
+        DataSource prodDataSource = DataSources.getProdDataSource();
+        return buildPartialCaseInfo(caseId, payload, prodDataSource);
+    }
+
+    protected static CaseInfo buildPartialCaseInfo(String caseId, String payload, DataSource dataSource) {
         CaseInfo caseInfo = new CaseInfo();
         caseInfo.caseId = caseId;
 

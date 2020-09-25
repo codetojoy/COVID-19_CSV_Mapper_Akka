@@ -11,6 +11,9 @@ public class SimpleDataSource implements DataSource {
     private static final int NUM_ROWS = 1_000;
     private static final int NUM_RECORDS_PER_CASE_ID = 3;
 
+    protected SimpleDataSource() {
+    }
+    
     @Override
     public ImmutablePair<String, String> parsePayload(String payload) {
         String[] payloadTokens = payload.split(Constants.TOKEN_SEPARATOR);

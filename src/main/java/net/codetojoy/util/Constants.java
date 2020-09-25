@@ -16,8 +16,12 @@ public class Constants {
     public static final int CSV_MOCK_INDEX_CASE_INFO = 2;
     public static final int CSV_MOCK_INDEX_VALUE = 3;
 
+    public static final int CSV_PROD_INDEX_CASE_ID = 3;
+    public static final int CSV_PROD_INDEX_CASE_INFO = 4;
+    public static final int CSV_PROD_INDEX_VALUE = 11;
+
     public static final String FIELD_NAME_REGION = "Region";
-    public static final String FIELD_NAME_AGE_GROUP = "Age Group";
+    public static final String FIELD_NAME_AGE_GROUP = "Age group";
     public static final String FIELD_NAME_RECOVERED = "Recovered";
 
     public static final String DOUBLE_QUOTE = "\"";

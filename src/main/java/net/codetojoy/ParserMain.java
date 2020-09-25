@@ -13,7 +13,7 @@ import net.codetojoy.util.Constants;
 
 public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
-    private static final DataSource dataSource = new SimpleDataSource();
+    private static final DataSource dataSource = DataSources.getProdDataSource();
     private static String csvFilename;
 
     private Map<String,ActorRef<ParseRow>> parserMap = new HashMap<>();
