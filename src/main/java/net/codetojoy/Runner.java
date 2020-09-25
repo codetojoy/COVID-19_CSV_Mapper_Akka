@@ -12,7 +12,7 @@ public class Runner {
 
     public static void main(String[] args) {
         csvFilename = args[0];
-        ActorSystem<BeginProcessing> greeterMain = ActorSystem.create(GreeterMain.create(csvFilename), "csv_akka");
+        ActorSystem<BeginProcessing> greeterMain = ActorSystem.create(ParserMain.create(csvFilename), "csv_akka");
         greeterMain.tell(new BeginProcessing("csv"));
 
         try {

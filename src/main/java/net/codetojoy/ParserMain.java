@@ -10,7 +10,7 @@ import java.util.stream.*;
 import net.codetojoy.data.*;
 import net.codetojoy.message.*;
 
-public class GreeterMain extends AbstractBehavior<BeginProcessing> {
+public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
     private static final DataSource dataSource = new SimpleDataSource();
     private static String csvFilename;
@@ -18,11 +18,11 @@ public class GreeterMain extends AbstractBehavior<BeginProcessing> {
     private Map<String,ActorRef<ParseRow>> parserMap = new HashMap<>();
 
     public static Behavior<BeginProcessing> create(String csvFilename) {
-        GreeterMain.csvFilename = csvFilename;
-        return Behaviors.setup(GreeterMain::new);
+        ParserMain.csvFilename = csvFilename;
+        return Behaviors.setup(ParserMain::new);
     }
 
-    private GreeterMain(ActorContext<BeginProcessing> context) {
+    private ParserMain(ActorContext<BeginProcessing> context) {
         super(context);
     }
 
