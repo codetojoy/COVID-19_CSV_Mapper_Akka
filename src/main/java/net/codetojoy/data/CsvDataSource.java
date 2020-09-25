@@ -11,8 +11,10 @@ import java.nio.charset.Charset;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class CsvDataSource implements DataSource {
+    private String inputCsvFilename;
 
-    protected CsvDataSource() {
+    protected CsvDataSource(String inputCsvFilename) {
+        this.inputCsvFilename = inputCsvFilename;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class CsvDataSource implements DataSource {
         Stream<String> lines = null;
 
         try {
-            Path file = Paths.get("./oriignal/data1000.csv");
+            Path file = Paths.get(inputCsvFilename);
             lines = Files.lines(file, Charset.defaultCharset());
         } catch (IOException ex) {
             System.exit(-1);

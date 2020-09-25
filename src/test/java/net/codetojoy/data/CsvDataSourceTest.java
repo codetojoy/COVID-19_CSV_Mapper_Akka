@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class CsvDataSourceTest {
-    private CsvDataSource csvDataSource = new CsvDataSource();
+    private CsvDataSource csvDataSource = new CsvDataSource("null file");
 
     @Test
     public void testGetDataInfo_basic() {

@@ -13,13 +13,14 @@ import net.codetojoy.util.Constants;
 
 public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
-    private static final DataSource dataSource = DataSources.getProdDataSource();
-    private static String csvFilename;
+    private static DataSource dataSource;
+    private static String outputCsvFilename;
 
     private Map<String,ActorRef<ParseRow>> parserMap = new HashMap<>();
 
-    public static Behavior<BeginProcessing> create(String csvFilename) {
-        ParserMain.csvFilename = csvFilename;
+    public static Behavior<BeginProcessing> create(String inputCsvFilename, String outputCsvFilename) {
+        ParserMain.outputCsvFilename = outputCsvFilename;
+        ParserMain.dataSource = DataSources.getProdDataSource(inputCsvFilename);
         return Behaviors.setup(ParserMain::new);
     }
 
@@ -33,7 +34,7 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
     }
 
     private Behavior<BeginProcessing> onBeginProcessing(BeginProcessing command) {
-        ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(csvFilename), command.name);
+        ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(outputCsvFilename), command.name);
 
         Stream<String> dataInfoStream = dataSource.getData();
         List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());
