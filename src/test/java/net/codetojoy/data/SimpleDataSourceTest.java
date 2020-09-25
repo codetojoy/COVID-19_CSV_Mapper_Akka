@@ -14,6 +14,18 @@ public class SimpleDataSourceTest {
     private SimpleDataSource simpleDataSource = new SimpleDataSource();
 
     @Test
+    public void testGetDataInfo_basic() {
+        String row = "\"25-SEP-2020\",\"5150\",\"Region\",\"18\"";
+        String s = "5150" + Constants.CASE_ID_SEPARATOR + row;
+
+        // test
+        DataInfo result = simpleDataSource.getDataInfo(s);
+
+        assertEquals("5150", result.caseId);
+        assertEquals(row, result.payload);
+    }
+
+    @Test
     public void testParsePayload_basic() {
         String payload = "\"25-SEP-2020\",\"5150\",\"Region\",\"18\"";
 
