@@ -18,6 +18,11 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
     private Map<String,ActorRef<ParseRow>> parserMap = new HashMap<>();
 
+    private Set<String> allCaseIds = new HashSet<>();
+    private Set<String> completeCaseIds = new HashSet<>();
+    private int logCounter = 0;
+    private static final int LOG_FREQUENCY = 2000;
+
     public static Behavior<BeginProcessing> create(String inputCsvFilename, String outputCsvFilename) {
         ParserMain.outputCsvFilename = outputCsvFilename;
         ParserMain.dataSource = DataSources.getProdDataSource(inputCsvFilename);
@@ -34,19 +39,37 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
     }
 
     private Behavior<BeginProcessing> onBeginProcessing(BeginProcessing command) {
-        ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(outputCsvFilename), command.name);
+        try {
+            ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(outputCsvFilename), command.name);
 
-        Stream<String> dataInfoStream = dataSource.getData();
-        List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());
+            Stream<String> dataInfoStream = dataSource.getData();
+            List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());
 
-        String lastCaseId = null;
-        for (String dataInfoString : dataInfoStrings) {
-            String commandName = command.name;
-            lastCaseId = processDataInfo(dataInfoString, lastCaseId, commandName, replyTo);
+            String lastCaseId = null;
+            for (String dataInfoString : dataInfoStrings) {
+                String commandName = command.name;
+                lastCaseId = processDataInfo(dataInfoString, lastCaseId, commandName, replyTo);
+
+                if (logCounter % LOG_FREQUENCY == 0) {
+                    getContext().getLog().info("TRACER ParserMain allCaseIds: {} completeCaseIds: {} ",
+                                                allCaseIds.size(), completeCaseIds.size());
+                }
+                if (logCounter > 100_000) {
+                    getContext().getLog().info("TRACER ParserMain ITER lastCaseId: {}", lastCaseId);
+                }
+                logCounter++;
+            }
+
+            getContext().getLog().info("TRACER ParserMain cp abc");
+
+            // finish off the last boundary
+            sendDoneMessage(lastCaseId, command.name, replyTo);
+
+            getContext().getLog().info("TRACER ParserMain FINAL allCaseIds: {} completeCaseIds: {} ",
+                                        allCaseIds.size(), completeCaseIds.size());
+        } catch (Exception ex) {
+            getContext().getLog().error("TRACER ParserMain caught exception! ex: {}", ex.getMessage());
         }
-
-        // finish off the last boundary
-        sendDoneMessage(lastCaseId, command.name, replyTo);
 
         return this;
     }
@@ -63,16 +86,19 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
         if (doInclude) {
             String caseId = dataInfo.caseId;
 
+            allCaseIds.add(caseId);
+
+            getContext().getLog().info("TRACER ParserMain lastCaseId: {} caseId: {}", lastCaseId, caseId);
+
             if (lastCaseId == null) {
                 lastCaseId = caseId;
             }
-
-            // getContext().getLog().info("TRACER GM {} {} {}", lastCaseId, caseId, dataInfo.payload);
 
             if (! caseId.equals(lastCaseId)) {
                 // new boundary, so done
                 sendDoneMessage(lastCaseId, commandName, replyTo);
                 lastCaseId = caseId;
+                completeCaseIds.add(caseId);
             }
 
             sendMessage(caseId, dataInfo.payload, commandName, replyTo);

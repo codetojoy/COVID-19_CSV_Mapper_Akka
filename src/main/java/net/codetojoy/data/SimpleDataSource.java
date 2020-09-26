@@ -13,7 +13,7 @@ public class SimpleDataSource implements DataSource {
 
     protected SimpleDataSource() {
     }
-    
+
     @Override
     public ImmutablePair<String, String> parsePayload(String payload) {
         String[] payloadTokens = payload.split(Constants.TOKEN_SEPARATOR);

@@ -9,19 +9,28 @@ import net.codetojoy.message.*;
 public class Runner {
     private static String inputCsvFilename;
     private static String outputCsvFilename;
-    private static  final int DELAY_IN_MILLIS = 2000;
+    private static  final int DELAY_IN_MILLIS = 10_000;
 
     public static void main(String[] args) {
         inputCsvFilename = args[0];
         outputCsvFilename = args[1];
-        ActorSystem<BeginProcessing> greeterMain = ActorSystem.create(ParserMain.create(inputCsvFilename, outputCsvFilename), "csv_akka");
-        greeterMain.tell(new BeginProcessing("csv"));
+        ActorSystem<BeginProcessing> parserMain = ActorSystem.create(ParserMain.create(inputCsvFilename, outputCsvFilename), "csv_akka");
+        parserMain.tell(new BeginProcessing("csv"));
 
         try {
-            watchCsvFileUntilQuiet();
+            // watchCsvFileUntilQuiet();
+            promptForUserInput();
         } catch (Exception ignored) {
         } finally {
-            greeterMain.terminate();
+            parserMain.terminate();
+        }
+    }
+
+    static void promptForUserInput() {
+        try {
+            System.out.println(">>> Press ENTER to exit <<<");
+            System.in.read();
+        } catch (Exception ex) {
         }
     }
 
