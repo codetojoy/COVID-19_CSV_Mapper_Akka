@@ -20,8 +20,8 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
     private Set<String> allCaseIds = new HashSet<>();
     private Set<String> completeCaseIds = new HashSet<>();
-    private int logCounter = 0;
-    private static final int LOG_FREQUENCY = 2000;
+    // private int logCounter = 0;
+    // private static final int LOG_FREQUENCY = 2000;
 
     public static Behavior<BeginProcessing> create(String inputCsvFilename, String outputCsvFilename) {
         ParserMain.outputCsvFilename = outputCsvFilename;
@@ -40,33 +40,15 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
     private Behavior<BeginProcessing> onBeginProcessing(BeginProcessing command) {
         try {
-            ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(outputCsvFilename), command.name);
+            final ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(outputCsvFilename), command.name);
+            final CaseIdCursor caseIdCursor = new CaseIdCursor();
+            final String commandName = command.name;
 
             Stream<String> dataInfoStream = dataSource.getData();
-            List<String> dataInfoStrings = dataInfoStream.collect(Collectors.toList());
-
-            String lastCaseId = null;
-            for (String dataInfoString : dataInfoStrings) {
-                String commandName = command.name;
-                lastCaseId = processDataInfo(dataInfoString, lastCaseId, commandName, replyTo);
-
-                if (logCounter % LOG_FREQUENCY == 0) {
-                    getContext().getLog().info("TRACER ParserMain allCaseIds: {} completeCaseIds: {} ",
-                                                allCaseIds.size(), completeCaseIds.size());
-                }
-                if (logCounter > 100_000) {
-                    getContext().getLog().info("TRACER ParserMain ITER lastCaseId: {}", lastCaseId);
-                }
-                logCounter++;
-            }
-
-            getContext().getLog().info("TRACER ParserMain cp abc");
+            dataInfoStream.forEach(dataInfoString -> processDataInfo(dataInfoString, caseIdCursor, commandName, replyTo));
 
             // finish off the last boundary
-            sendDoneMessage(lastCaseId, command.name, replyTo);
-
-            getContext().getLog().info("TRACER ParserMain FINAL allCaseIds: {} completeCaseIds: {} ",
-                                        allCaseIds.size(), completeCaseIds.size());
+            sendDoneMessage(caseIdCursor.lastCaseId, command.name, replyTo);
         } catch (Exception ex) {
             getContext().getLog().error("TRACER ParserMain caught exception! ex: {}", ex.getMessage());
         }
@@ -74,9 +56,7 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
         return this;
     }
 
-    protected String processDataInfo(String dataInfoString, String lastCaseId, String commandName,
-                                ActorRef<EmitCase> replyTo) {
-        String result = lastCaseId;
+    protected void processDataInfo(String dataInfoString, CaseIdCursor caseIdCursor, String commandName, ActorRef<EmitCase> replyTo) {
         DataInfo dataInfo = dataSource.getDataInfo(dataInfoString);
 
         // TODO: filter by region ?
@@ -88,27 +68,23 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
             allCaseIds.add(caseId);
 
-            getContext().getLog().info("TRACER ParserMain lastCaseId: {} caseId: {}", lastCaseId, caseId);
+            getContext().getLog().info("TRACER ParserMain lastCaseId: {} caseId: {}", caseIdCursor.lastCaseId, caseId);
 
-            if (lastCaseId == null) {
-                lastCaseId = caseId;
+            if (caseIdCursor.lastCaseId == null) {
+                caseIdCursor.lastCaseId = caseId;
             }
 
-            if (! caseId.equals(lastCaseId)) {
+            if (! caseId.equals(caseIdCursor.lastCaseId)) {
                 // new boundary, so done
-                sendDoneMessage(lastCaseId, commandName, replyTo);
-                lastCaseId = caseId;
+                sendDoneMessage(caseIdCursor.lastCaseId, commandName, replyTo);
+                caseIdCursor.lastCaseId = caseId;
                 completeCaseIds.add(caseId);
             }
 
             sendMessage(caseId, dataInfo.payload, commandName, replyTo);
-
-            result = caseId;
         } else {
             getContext().getLog().error("TRACER illegal caseId: {}", dataInfo.caseId);
         }
-
-        return result;
     }
 
     protected ActorRef<ParseRow> getGreeterByCaseId(String caseId) {
@@ -136,4 +112,10 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
         ActorRef<ParseRow> parser = getGreeterByCaseId(caseId);
         parser.tell(new ParseRow(caseId, payload, isDone, name, replyTo));
     }
+}
+
+// --------------------
+
+class CaseIdCursor {
+    String lastCaseId;
 }
