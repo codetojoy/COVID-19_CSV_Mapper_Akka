@@ -4,12 +4,13 @@ import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.*;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import net.codetojoy.data.*;
 import net.codetojoy.message.*;
-import net.codetojoy.util.Constants;
+import net.codetojoy.util.*;
 
 public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
@@ -17,11 +18,6 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
     private static String outputCsvFilename;
 
     private Map<String,ActorRef<ParseRow>> parserMap = new HashMap<>();
-
-    private Set<String> allCaseIds = new HashSet<>();
-    private Set<String> completeCaseIds = new HashSet<>();
-    // private int logCounter = 0;
-    // private static final int LOG_FREQUENCY = 2000;
 
     public static Behavior<BeginProcessing> create(String inputCsvFilename, String outputCsvFilename) {
         ParserMain.outputCsvFilename = outputCsvFilename;
@@ -40,15 +36,18 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
 
     private Behavior<BeginProcessing> onBeginProcessing(BeginProcessing command) {
         try {
-            final ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(outputCsvFilename), command.name);
-            final CaseIdCursor caseIdCursor = new CaseIdCursor();
+            Timer timer = new Timer();
             final String commandName = command.name;
+            final ActorRef<EmitCase> replyTo = getContext().spawn(Emitter.create(outputCsvFilename), commandName);
+            final CaseIdCursor caseIdCursor = new CaseIdCursor();
 
             Stream<String> dataInfoStream = dataSource.getData();
             dataInfoStream.forEach(dataInfoString -> processDataInfo(dataInfoString, caseIdCursor, commandName, replyTo));
 
             // finish off the last boundary
             sendDoneMessage(caseIdCursor.lastCaseId, command.name, replyTo);
+
+            getContext().getLog().info("TRACER ParserMain {}", timer.getElapsed("messages sent"));
         } catch (Exception ex) {
             getContext().getLog().error("TRACER ParserMain caught exception! ex: {}", ex.getMessage());
         }
@@ -66,8 +65,6 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
         if (doInclude) {
             String caseId = dataInfo.caseId;
 
-            allCaseIds.add(caseId);
-
             getContext().getLog().info("TRACER ParserMain lastCaseId: {} caseId: {}", caseIdCursor.lastCaseId, caseId);
 
             if (caseIdCursor.lastCaseId == null) {
@@ -78,7 +75,6 @@ public class ParserMain extends AbstractBehavior<BeginProcessing> {
                 // new boundary, so done
                 sendDoneMessage(caseIdCursor.lastCaseId, commandName, replyTo);
                 caseIdCursor.lastCaseId = caseId;
-                completeCaseIds.add(caseId);
             }
 
             sendMessage(caseId, dataInfo.payload, commandName, replyTo);
